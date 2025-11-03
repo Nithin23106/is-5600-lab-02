@@ -65,4 +65,41 @@ function viewStock(symbol, stocks) {
     const stock = stocks.find(s => s.symbol == symbol);
     document.querySelector('#stockName').textContent = stock.name;
     document.querySelector('#stockSector').textContent = stock.sector;
-    document.querySelector('#stockIndustry'
+    document.querySelector('#stockIndustry').textContent = stock.subIndustry;
+    document.querySelector('#stockAddress').textContent = stock.address;
+    document.querySelector('#logo').src = `logos/${symbol}.svg`;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const stocksData = JSON.parse(stockContent);
+  const userData = JSON.parse(userContent);
+  generateUserList(userData, stocksData);
+  
+  const deleteButton = document.querySelector('#delete');
+  const saveButton = document.querySelector('#save');
+  
+  deleteButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    const userId = document.querySelector('#userID').value;
+    const userIndex = userData.findIndex(u => u.id == userId);
+    if (userIndex > -1) {
+      userData.splice(userIndex, 1);
+      generateUserList(userData, stocksData);
+    }
+  });
+  
+  saveButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    const id = document.querySelector('#userID').value;
+    const user = userData.find(u => u.id == id);
+    if (user) {
+      user.user.firstname = document.querySelector('#firstname').value;
+      user.user.lastname = document.querySelector('#lastname').value;
+      user.user.address = document.querySelector('#address').value;
+      user.user.city = document.querySelector('#city').value;
+      user.user.email = document.querySelector('#email').value;
+      generateUserList(userData, stocksData);
+    }
+  });
+});
